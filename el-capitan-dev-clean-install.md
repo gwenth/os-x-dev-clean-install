@@ -1,14 +1,4 @@
-## Bypass OS X System Integrity Protection
-
-- Reboot the mac pressing CMD + R
-- Open Utilities/Terminal
-- Type:
-
-```bash
-csrutil disable; reboot
-```
-
-## OS X Preferences
+# OS X Preferences
 
 Most of these require logout/restart to take effect
 
@@ -90,15 +80,6 @@ defaults write com.apple.finder _FXShowPosixPathInTitle -bool YES
 # Switch to dark menu bar
 defaults write NSGlobalDomain AppleInterfaceStyle Dark; killall Dock
 
-# Prevent Time Machine from Prompting to Use New Hard Drives as Backup Volume
-defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
-
-# Time Machine - Disable local Time Machine backups
-hash tmutil &> /dev/null && sudo tmutil disablelocal
-
-# Time Machine - Disable local Time Machine snapshots
-sudo tmutil disablelocal
-
 # Sets default save target to be a local disk, not iCloud.
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
@@ -124,20 +105,6 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo Hos
 
 # System - Disable software updates
 sudo softwareupdate --schedule off
-
-# Trackpad - Map bottom right corner to right-click
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
-defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
-defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool trube
-
-# Trackpad - Enable tap to click for current user and the login screen
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-
-# Dock - Remove all default app icons
-defaults write com.apple.dock persistent-apps -array
 
 # Dock - Automatically hide and show
 defaults write com.apple.dock autohide -bool true
@@ -224,7 +191,7 @@ defaults write com.apple.systemsound "com.apple.sound.uiaudio.enabled" -int 0
 echo "set bell-style none" >> ~/.inputrc
 ```
 
-## OS X Preferences that need custom input
+# OS X Preferences that need custom input
 
 ```bash
 # Set Login Window Text
@@ -241,44 +208,8 @@ sudo systemsetup -settimezone Europe/Paris
 sudo systemsetup setusingnetworktime on
 ```
 
-## OS X Preferences to make keyboard repeat very fast!
 
-```bash
-# Enable character repeat on keydown
-# Set a shorter Delay until key repeat
-# Set a blazingly fast keyboard repeat rate
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false && \
-defaults write NSGlobalDomain KeyRepeat -int 1 && \
-defaults write NSGlobalDomain InitialKeyRepeat -int 10
-
-```
-
-## Shell
-
-```bash
-# Download Terminal profile with font
-curl -o /Library/Fonts/meslo.otf https://raw.githubusercontent.com/lourou/os-x-dev-clean-install/master/terminal/meslo.otf && \
-curl -o /tmp/Lacompany.terminal https://raw.githubusercontent.com/lourou/os-x-dev-clean-install/master/terminal/Lacompany.terminal && \
-open /tmp/Lacompany.terminal
-
-# Then, make the profile the default one
-defaults write com.apple.Terminal "Startup Window Settings" -string "Lacompany" && \
-defaults write com.apple.Terminal "Default Window Settings" -string "Lacompany" && \
-osascript -e 'tell application "Terminal" to close windows' & exit
-
-# Switch to zsh
-curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
-```
-
-### Update .zshrc
-
-```bash
-#syntax highlighting
-git clone git://github.com/zsh-users/zsh-syntax-highlighting.git \
-~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-```
-
-### Homebrew Basics
+# Homebrew Basics
 
 ```bash
 # install package manager
@@ -298,15 +229,54 @@ youtube-dl \
 autojump \
 npm
 
-# Add the following line to your ~/.zshrc file
-# Remember to source the file to update your current session
-[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+
 
 # Install Cask
 brew tap caskroom/cask
 ```
 
-## Development Tools
+# Shell
+
+```bash
+# install hyper terminal
+brew cask install hyper
+
+# enable touchID on shell
+sudo nano /etc/pam.d/sudo
+# on top of the file, add the following line :
+auth       sufficient     pam_tid.so
+```
+
+## zsh && autojump
+```bash
+curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
+zsh
+
+# Add the following line to your ~/.zshrc file
+[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+
+# Make zsh the default shell 
+nano ~/.hyper.js
+# Fill the shell value with `shell: '/usr/local/bin/zsh',`
+
+# Don't forget to source it :)
+source ~/.zshrc
+```
+
+
+
+# Development Tools
+
+## Create a conf folder 
+
+- Used for all custom config files, it prevents them from being overriden by homebrew
+- If the file can't be located here (for nginx for instance) at least you'll know where to find all of them with symlink
+
+```bash
+mkdir -p /usr/local/conf/nginx
+sudo mkdir /var/log/nginx
+sudo mkdir /var/log/php-fpm
+```
 
 ### Installing nginx
 
@@ -316,10 +286,11 @@ brew install nginx
 # To have launchd start nginx now and restart at login:
 brew services start nginx
 ```
-
+- ln -s /usr/local/etc/nginx/nginx.conf /usr/local/conf/nginx
+- Add the following line to store errors : `error_log  /var/log/nginx/error.log;`
 - Default document root is: /usr/local/var/www
-- The default nginx port is set in /usr/local/etc/nginx/nginx.conf to 8080 so that nginx can run without sudo.
-- nginx will load all files in /usr/local/etc/nginx/servers/.
+- The default nginx port is set to 8080 so that nginx can run without sudo. Keep it or replace it by 80.
+- replace the default location nginx will load (`include /usr/local/etc/nginx/servers/`) by `include /usr/local/nginx/sites-enabled/*;`.
 - switch nginx from port 8080 to 80 and write error logs in /var/log/nginx:
 
 ```bash
@@ -328,11 +299,7 @@ sudo mkdir /var/log/nginx
 sudo mkdir /var/log/php-fpm
 nano /usr/local/etc/nginx/nginx.conf
 
-# At the top of the config file, add this:
-error_log  /var/log/nginx/error.log;
 
-# Change port from 8080 to 80
-listen 80;
 
 # Reload config
 sudo nginx (or sudo nginx -s reload)
@@ -818,8 +785,20 @@ to access this site, visit http://example.com.build
 sudo mkdir -p /var/ && sudo ln -s ~/Sites /var/www
 ```
 
-## Credits
+## Bypass OS X System Integrity Protection
 
+- Reboot the mac pressing CMD + R
+- Open Utilities/Terminal
+- Type:
+
+```bash
+csrutil disable; reboot
+```
+
+# Credits
+
+- <https://github.com/lourou/os-x-dev-clean-install>
+- <https://twitter.com/cabel/status/931292107372838912>
 - <https://gist.github.com/saetia/1623487>
 - <https://github.com/OzzyCzech/dotfiles/blob/master/how-to-install-mac.md>
 - <http://www.tug.org/mactex/elcapitan.html>
