@@ -252,12 +252,16 @@ auth       sufficient     pam_tid.so
 curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
 zsh
 
+# If not here add zsh to your shell list in /etc/shells and check this line is here :
+/usr/local/bin/zsh
+
 # Add the following line to your ~/.zshrc file
 [[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
 
 # Make zsh the default shell 
 nano ~/.hyper.js
-# Fill the shell value with `shell: '/usr/local/bin/zsh',`
+# Fill the shell value with 
+`shell: '/usr/local/bin/zsh',`
 
 # Don't forget to source it :)
 source ~/.zshrc
@@ -278,6 +282,13 @@ sudo mkdir /var/log/nginx
 sudo mkdir /var/log/php-fpm
 ```
 
+## Install dnsmask
+
+DNSMasq is used to resolve all domains that end with .dev to 127.0.0.1. So you don´t need to touch hosts-File anymore.
+```
+brew install dnsmasq
+```
+
 ### Installing nginx
 
 ```
@@ -285,6 +296,7 @@ brew install nginx
 
 # To have launchd start nginx now and restart at login:
 brew services start nginx
+
 ```
 - ln -s /usr/local/etc/nginx/nginx.conf /usr/local/conf/nginx
 - Add the following line to store errors : `error_log  /var/log/nginx/error.log;`
