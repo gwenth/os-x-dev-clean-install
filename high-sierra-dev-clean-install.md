@@ -71,8 +71,8 @@ defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool 
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true && \
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
-# Show the ~/Library folder
-chflags nohidden ~/Library
+# Show the all files and folders
+defaults write com.apple.finder AppleShowAllFiles TRUE
 
 # Show absolute path in finder's title bar. 
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool YES
@@ -217,17 +217,17 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 
 # install homebrew packages
 brew install \
-tree \
-ssh-copy-id \
-wget \
-jpegoptim \
-pngcrush \
-colordiff \
-imagemagick \
-graphicsmagick \
-youtube-dl \
 autojump \
+colordiff \
+graphicsmagick \
+imagemagick \
+jpegoptim \
 npm
+pngcrush \
+ssh-copy-id \
+tree \
+wget \
+youtube-dl \
 
 
 
@@ -549,50 +549,36 @@ brew tap caskroom/versions
 #install mac apps & fonts
 brew cask install \
 1password \
-font-source-code-pro \
-sublime-text-dev \
-google-chrome \
-firefox \
-opera \
-sequel-pro \
 android-studio \
-mactracker \
-mpv \
-paw \
-whatsapp \
-shimo \
-sketch \
-tripmode \
-dupeguru \
-imageoptim \
-imagealpha \
-bartender \
+androidtool \
 appdelete \
 carbon-copy-cloner \
 charles \
-cloud \
 colorpicker-developer \
-dropbox \
+dupeguru \
 evernote \
-flux \
-focus \
-kindle \
-transmit \
+dropbox \
+firefox \
+google-chrome \
+imageoptim \
+imagealpha \
+macdown \
+mactracker \
 moom \
-sourcetree \
-slack \
-skype \
-screenhero \
-pngyu \
-synology-assistant \
-omnifocus \
+opera \
 omnidisksweeper \
 omnigraffle \
+paw \
+pngyu \
+sequel-pro \
+sourcetree \
+sketch \
+skype \
+slack \
 spotify \
-scansnap-manager-ix100 \
-vmware-fusion \
-androidtool \
-macdown \
+sublime-text \
+transmit \
+tripmode \
 vlc \
 vox
 
