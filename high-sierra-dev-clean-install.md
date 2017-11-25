@@ -305,7 +305,7 @@ brew services start nginx
 - `ln -s /usr/local/etc/nginx/nginx.conf /usr/local/conf/nginx`
 - In  `/usr/local/etc/nginx/nginx.conf` :
   - Add the following line to store errors : `error_log  /var/log/nginx/error.log;`
-  - The default nginx port is set to 8080 so that nginx can run without sudo. Keep it or replace it by 80.
+  - The default nginx port is set to 8080 so that nginx can run without sudo. Replace it by 80.
   - replace the default location nginx will load (`include /usr/local/etc/nginx/servers/`) by `include /usr/local/nginx/sites-enabled/*;`.
   
 - Default document root is: /usr/local/var/www
@@ -319,11 +319,22 @@ mkdir -p /usr/local/etc/nginx/conf.d
 ### Launch Nginx at login
 
 ```bash 
-sudo cp -v /usr/local/opt/nginx/*.plist /Library/LaunchDaemons/ && 
-sudo chown root:wheel /Library/LaunchDaemons/homebrew.mxcl.nginx.plist &&
+sudo cp -v /usr/local/opt/nginx/*.plist /Library/LaunchDaemons/
+```
+
+Then edit `/Library/LaunchDaemons/homebrew.mxcl.nginx.plist` and change the `Label` to `nginx` which will allow us to write:
+```bash
+launchctl start nginx```
+instead of 
+```bash
+launchctl start homebrew.mxcl.nginx
+```
+
+Load nginx with :
+```bash
 sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.nginx.plist
 ```
-  
+
 Run the following to unload the service so it will not start again at login:
 
 ```bash    
@@ -354,6 +365,7 @@ Then install PHP
     
 ### Launch php at login 
 
+    sudo cp /usr/local/opt/php72/homebrew.mxcl.php72.plist ~/Library/LaunchAgents
     launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php72.plist
 
 
