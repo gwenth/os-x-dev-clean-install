@@ -282,12 +282,7 @@ sudo mkdir -p /var/log/{nginx,php-fpm}
 sudo mkdir -p /usr/local/var/run/php-fpm
 ```
 
-## Install dnsmask
 
-DNSMasq is used to resolve all domains that end with .dev to 127.0.0.1. So you don´t need to touch hosts-File anymore.
-```
-brew install dnsmasq
-```
 
 ## Nginx
 
@@ -304,17 +299,18 @@ brew services start nginx
 
 - `ln -s /usr/local/etc/nginx/nginx.conf /usr/local/conf/nginx`
 - In  `/usr/local/etc/nginx/nginx.conf` :
+  - Change the `user nobody;` by `user _www;`
   - Add the following line to store errors : `error_log  /var/log/nginx/error.log;`
-  - The default nginx port is set to 8080 so that nginx can run without sudo. Replace it by 80.
+  - The default nginx port is set to `listen 8080;` so that nginx can run without sudo. Replace it by `listen 80`.
+  - Change `server_name localhost;` by `server_name 127.0.0.1;`
   - replace the default location nginx will load (`include /usr/local/etc/nginx/servers/`) by `include /usr/local/nginx/sites-enabled/*;`.
   
 - Default document root is: /usr/local/var/www
 
 
 Reload the config with :
-`(sudo) nginx -s reload`
+`sudo nginx -s reload`
 
-mkdir -p /usr/local/etc/nginx/conf.d
 
 ### Launch Nginx at login
 
@@ -330,7 +326,7 @@ instead of
 launchctl start homebrew.mxcl.nginx
 ```
 
-Load nginx with :
+Load nginx now and automatically at reboot with :
 ```bash
 sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.nginx.plist
 ```
@@ -341,7 +337,7 @@ Run the following to unload the service so it will not start again at login:
 sudo launchctl unload -w /Library/LaunchDaemons/homebrew.mxcl.nginx.plist
 ```
 
-### Installing PHP-FPM
+## Installing PHP-FPM
 
 Start with taping formulas repositories:
 
@@ -362,16 +358,23 @@ Then install PHP
     --with-homebrew-curl \
     --with-homebrew-openssl \
     php72
+
+### Configure php-fpm.conf and php.ini
+
+You can found basic php-fpm config file here `/usr/local/etc/php/7.2/php-fpm.d/www.conf`.
+Check especially `listen = 127.0.0.1:9000` and rename it to `unix=/usr/local/var/run/php-fpm/php72-fpm.sock`.
+Then change permission and search for `;listen.mode = 0660` and change it to `listen.mode = 0666` (don't forget to remove the semi-colon)
+Everything else can be left as it is.
+
+
     
-### Launch php at login 
+### Launch php now and automatically at login 
 
     sudo cp /usr/local/opt/php72/homebrew.mxcl.php72.plist ~/Library/LaunchAgents
     launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php72.plist
 
+(Just remove -w option if you don't want it to start automatically, but why would you want that ?)
 
-Ensure php is running :
-
-    lsof -Pni4 | grep LISTEN | grep php
 
 Update your shell profile (`~/.zshrc`, `~/.bashrc` or so) file so that this branch new php is called before the system's one
 
@@ -383,89 +386,6 @@ Source it :
 
 Check if `php -v` or `php-fpm -v` gives you PHP version 7.2
 
-### Configure php-fpm.conf and php.ini
-
-You can found basic php-fpm config file here `/usr/local/etc/php/7.2/php-fpm.d/www.conf`.
-Check especially `listen = 127.0.0.1:9000` and rename it to `listen = 127.0.0.1:9056`.
-Everything else can be left as it is.
-
-PHP config files can be found here `subl /usr/local/etc/php/5.6/conf.d/`. You can change `php.ini` but its more more easly keept change is spearate file:
-
-    subl /usr/local/etc/php/5.6/conf.d/custom.ini
-
-My configuration:
-
-    short_open_tag = On
-    display_errors = On
-    display_startup_errors = On
-    upload_max_filesize = 1024M
-    post_max_size = 1024M
-    date.timezone = "Europe/Paris"
-    error_reporting = E_ALL
-    memory_limit = 512M
-
-    log_errors=On
-    error_log=/var/log/php-fpm/error.log
-
-    mysql.default_socket=/tmp/mysql.sock
-    pdo_mysql.default_socket=/tmp/mysql.sock
-
-    [opcache]
-    opcache.revalidate_freq=1
-
-    [xdebug]
-    xdebug.remote_enable=1
-    xdebug.remote_connect_back=On
-    ;xdebug.remote_host=127.0.0.1
-    ;xdebug.remote_port=9001
-    xdebug.remote_autostart=1
-    xdebug.idekey=PHPSTORM
-    xhprof.output_dir="/var/tmp/xhprof"
-
-    xdebug.profiler_enable = 0;
-    xdebug.profiler_output_name=cachegrind.out.%H.%t
-    xdebug.profiler_enable_trigger = 1;
-    xdebug.profiler_output_dir = /Users/louis/.Trash
-
-### Launch PHP FPM at login
-
-- Use `nano ~/Library/LaunchAgents/org.php.php-fpm.plist` to save a PHP-FPM plist file:
-
-```bash
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-<key>Label</key><string>php-fpm</string>
-<key>Program</key><string>/usr/local/sbin/php-fpm</string>
-<key>KeepAlive</key><true/>
-</dict>
-</plist>
-```
-
-Run the following commands to load the services for the first time:
-
-```bash 
-launchctl load -w ~/Library/LaunchAgents/org.php.php-fpm.plist
-```
-  
-Run the following to unload the service so it will not start again at login:
-
-```bash    
-launchctl unload -w ~/Library/LaunchAgents/org.php.php-fpm.plist
-```
-
-### Installing PHP 7.0
-
-```
-brew install -v --with-fpm \
---without-apache \
---with-mysql \
---with-homebrew-curl \
---with-homebrew-openssl \
---disable-opcache \
-php7O
-```
 
 More info here:
 <https://getgrav.org/blog/mac-os-x-apache-setup-multiple-php-versions>
@@ -717,7 +637,6 @@ pod setup
 ```bash
 brew install cmake
 sudo gem install net-sftp dandelion
-sudo gem install net-sftp
 ```
 
 ## Node Packages
@@ -735,42 +654,6 @@ Add Latex binary to PATH variable:
     export PATH="/usr/local/bin:/usr/local/sbin:/Library/TeX/texbin:/
 
 
-### Local Web Server
----
-
-#### Add DNS Domains, Enable dnsmasq daemon
-
-This will route requests to any url ending in **.build** back to your own computer. The goal is to use urls like http://example.com.build for development while you work on http://example.com
-
-```bash
-mkdir -pv $(brew --prefix)/etc/ && \
-echo 'address=/.build/127.0.0.1' > $(brew --prefix)/etc/dnsmasq.conf && \
-sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons && \
-sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist && \
-sudo mkdir -v /etc/resolver && \
-sudo zsh -c 'echo "nameserver 127.0.0.1" > /etc/resolver/build'
-
-#flush cache
-sudo discoveryutil mdnsflushcache && scutil --dns
-```
-
-#### Enable virtual hosts
-
-This will allow you to serve folders under ~/Sites/ as websites. 
-
-* ~/Sites
-  * example.com
-    * htdocs
-      * index.html
-  
-to access this site, visit http://example.com.build
-
-
-#### Match production server paths
-
-```bash
-sudo mkdir -p /var/ && sudo ln -s ~/Sites /var/www
-```
 
 ## Bypass OS X System Integrity Protection
 
