@@ -289,7 +289,7 @@ DNSMasq is used to resolve all domains that end with .dev to 127.0.0.1. So you d
 brew install dnsmasq
 ```
 
-### Installing nginx
+## Installing nginx
 
 ```
 brew install nginx
@@ -348,16 +348,6 @@ Start with taping formulas repositories:
     brew tap homebrew/versions
     brew tap homebrew/homebrew-php
 
-Remove all PHP dependencies (it's only safe way to compile PHP successfully)
-
-    brew remove libtool
-    brew remove freetype
-    brew remove gettext
-    brew remove icu4c
-    brew remove jpeg
-    brew remove libpng
-    brew remove unixodbc
-    brew remove zlib
 
 Reinstall curl with openssl:
 
@@ -372,7 +362,7 @@ Then install PHP
     --with-homebrew-openssl \
     --disable-opcache \
     php56
-
+    
 Install PHP extensions
 
     brew install php56-http
@@ -386,13 +376,18 @@ Install PHP extensions
     brew install php56-tidy
     brew install php56-xdebug
 
+
+Launch PHP
+
+    brew services start homebrew/php/php72
+
 We will now replace MacOS X PHP with the one we just installed.
 
 Update `~/.zshrc` in order to have the PATH begining with:
 
     export PATH="/usr/local/bin:/usr/local/sbin:...
 
-Restart Terminal and check if `php -v` or `php-fpm -v` gives you PHP version 5.6
+Restart Terminal and check if `php -v` or `php-fpm -v` gives you PHP version 7.2
 
 ### php-fpm.conf and php.ini
 
