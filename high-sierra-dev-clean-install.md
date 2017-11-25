@@ -277,9 +277,9 @@ source ~/.zshrc
 - If the file can't be located here (for nginx for instance) at least you'll know where to find all of them with symlink
 
 ```bash
-mkdir -p /usr/local/conf/nginx
-sudo mkdir /var/log/nginx
-sudo mkdir /var/log/php-fpm
+mkdir -p /usr/local/conf/nginx/{sites-enabled,sites-available,ssl}
+sudo mkdir -p /var/log/{nginx,php-fpm}
+sudo mkdir -p /usr/local/var/run/php-fpm
 ```
 
 ## Install dnsmask
@@ -289,42 +289,32 @@ DNSMasq is used to resolve all domains that end with .dev to 127.0.0.1. So you d
 brew install dnsmasq
 ```
 
-## Installing nginx
+## Nginx
+
+### Installation
 
 ```
-brew install nginx
+brew install nginx --verbose --with-debug
+```
 
-# To have launchd start nginx now and restart at login:
+To have launchd start nginx now and restart at login:
+```
 brew services start nginx
-
 ```
-- ln -s /usr/local/etc/nginx/nginx.conf /usr/local/conf/nginx
-- Add the following line to store errors : `error_log  /var/log/nginx/error.log;`
+
+- `ln -s /usr/local/etc/nginx/nginx.conf /usr/local/conf/nginx`
+- In  `/usr/local/etc/nginx/nginx.conf` :
+  - Add the following line to store errors : `error_log  /var/log/nginx/error.log;`
+  - The default nginx port is set to 8080 so that nginx can run without sudo. Keep it or replace it by 80.
+  - replace the default location nginx will load (`include /usr/local/etc/nginx/servers/`) by `include /usr/local/nginx/sites-enabled/*;`.
+  
 - Default document root is: /usr/local/var/www
-- The default nginx port is set to 8080 so that nginx can run without sudo. Keep it or replace it by 80.
-- replace the default location nginx will load (`include /usr/local/etc/nginx/servers/`) by `include /usr/local/nginx/sites-enabled/*;`.
-- switch nginx from port 8080 to 80 and write error logs in /var/log/nginx:
-
-```bash
-# Activate the logs
-sudo mkdir /var/log/nginx
-sudo mkdir /var/log/php-fpm
-nano /usr/local/etc/nginx/nginx.conf
 
 
+Reload the config with :
+`(sudo) nginx -s reload`
 
-# Reload config
-sudo nginx (or sudo nginx -s reload)
-
-# Create these bunch of folders which we're going to use for the upcoming configuration:
-mkdir -p /usr/local/etc/nginx/sites-available
-mkdir -p /usr/local/etc/nginx/sites-enabled
 mkdir -p /usr/local/etc/nginx/conf.d
-mkdir -p /usr/local/etc/nginx/ssl
-
-# Edit /usr/local/nginx/nginx.conf and add this line before the end of 'http' directive
-include /usr/local/etc/nginx/sites-enabled/*;
-```
 
 ### Launch Nginx at login
 
@@ -360,40 +350,32 @@ Then install PHP
     --with-mysql \
     --with-homebrew-curl \
     --with-homebrew-openssl \
-    --disable-opcache \
-    php56
+    php72
     
-Install PHP extensions
+### Launch php at login 
 
-    brew install php56-http
-    brew install php56-mcrypt
-    brew install php56-memcache
-    brew install php56-memcached
-    brew install php56-mongo
-    brew install php56-opcache
-    brew install php56-propro
-    brew install php56-raphf
-    brew install php56-tidy
-    brew install php56-xdebug
+    launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php72.plist
 
 
-Launch PHP
+Ensure php is running :
 
-    brew services start homebrew/php/php72
+    lsof -Pni4 | grep LISTEN | grep php
 
-We will now replace MacOS X PHP with the one we just installed.
-
-Update `~/.zshrc` in order to have the PATH begining with:
+Update your shell profile (`~/.zshrc`, `~/.bashrc` or so) file so that this branch new php is called before the system's one
 
     export PATH="/usr/local/bin:/usr/local/sbin:...
 
-Restart Terminal and check if `php -v` or `php-fpm -v` gives you PHP version 7.2
+Source it :
 
-### php-fpm.conf and php.ini
+    source ~/.zshrc
 
-You can found basic php-fpm config file here `subl /usr/local/etc/php/5.6/php-fpm.conf`.
+Check if `php -v` or `php-fpm -v` gives you PHP version 7.2
+
+### Configure php-fpm.conf and php.ini
+
+You can found basic php-fpm config file here `/usr/local/etc/php/7.2/php-fpm.d/www.conf`.
 Check especially `listen = 127.0.0.1:9000` and rename it to `listen = 127.0.0.1:9056`.
-Everything else can be leave as is.
+Everything else can be left as it is.
 
 PHP config files can be found here `subl /usr/local/etc/php/5.6/conf.d/`. You can change `php.ini` but its more more easly keept change is spearate file:
 
