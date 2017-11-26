@@ -337,7 +337,7 @@ Run the following to unload the service so it will not start again at login:
 sudo launchctl unload -w /Library/LaunchDaemons/homebrew.mxcl.nginx.plist
 ```
 
-## Installing PHP-FPM
+## Installing PHP-FPM (multiple versions)
 
 Start with taping formulas repositories:
 
@@ -350,8 +350,22 @@ Reinstall curl with openssl:
 
     brew reinstall --with-openssl curl
 
-Then install PHP
+Then install PHPs
 
+    brew install -v --with-fpm \
+    --without-apache \
+    --with-mysql \
+    --with-homebrew-curl \
+    --with-homebrew-openssl \
+    php56
+
+    brew install -v --with-fpm \
+    --without-apache \
+    --with-mysql \
+    --with-homebrew-curl \
+    --with-homebrew-openssl \
+    php71
+    
     brew install -v --with-fpm \
     --without-apache \
     --with-mysql \
@@ -361,8 +375,9 @@ Then install PHP
 
 ### Configure php-fpm.conf and php.ini
 
-You can found basic php-fpm config file here `/usr/local/etc/php/7.2/php-fpm.d/www.conf`.
-Check especially `listen = 127.0.0.1:9000` and rename it to `unix=/usr/local/var/run/php-fpm/php72-fpm.sock`.
+You can found basic php-fpm config file here `/usr/local/etc/php/*/php-fpm.d/www.conf`.
+Check especially `listen = 127.0.0.1:9000` and rename it to `unix=/usr/local/var/run/php-fpm/php72-fpm.sock`. 
+(In each file, replace 72 by the version you're editing)
 Then change permission and search for `;listen.mode = 0660` and change it to `listen.mode = 0666` (don't forget to remove the semi-colon)
 Everything else can be left as it is.
 
@@ -370,6 +385,12 @@ Everything else can be left as it is.
     
 ### Launch php now and automatically at login 
 
+    sudo cp /usr/local/opt/php72/homebrew.mxcl.php56.plist ~/Library/LaunchAgents
+    launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php56.plist
+    
+    sudo cp /usr/local/opt/php72/homebrew.mxcl.php71.plist ~/Library/LaunchAgents
+    launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php71.plist
+    
     sudo cp /usr/local/opt/php72/homebrew.mxcl.php72.plist ~/Library/LaunchAgents
     launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php72.plist
 
@@ -384,11 +405,34 @@ Source it :
 
     source ~/.zshrc
 
-Check if `php -v` or `php-fpm -v` gives you PHP version 7.2
+
+### Switching PHP cli
+
+You can use the custom script [phpswitcher](https://raw.githubusercontent.com/gwenth/os-x-dev-clean-install/master/phpswitcher)
+
+    mkdir ~/bin
+    curl -L https://raw.githubusercontent.com/gwenth/os-x-dev-clean-install/master/phpswitcher ~/bin/
+    chmod u+x ~/bin/phpswitcher
+    
+Add ~/bin to your `$PATH` variable in you `~/.zshrc` or `~/.bashrc`
+
+    export PATH="~/bin:..."
+
+Source it :
+
+    source ~/.zshrc
+
+This script is really simple, it unlinks the current php formula and links the new one.
+Usage `phpswitcher 72` will enable php72 cli
 
 
-More info here:
-<https://getgrav.org/blog/mac-os-x-apache-setup-multiple-php-versions>
+### What about my websites ?
+
+I didn't find a really good way to handle it for now.
+I usually do 2 things :
+- Duplicate my vhost that I append with the older version : `example56.dev` 
+- In the `location ~ \.php$` section I change the `fastcgi_pass` value to match the socket I chose earlier.
+
 
 ### Installing Drush
 
