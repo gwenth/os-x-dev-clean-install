@@ -219,6 +219,7 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 brew install \
 autojump \
 colordiff \
+drush \
 graphicsmagick \
 imagemagick \
 jpegoptim \
@@ -376,9 +377,11 @@ Then install PHPs
 ### Configure php-fpm.conf and php.ini
 
 You can found basic php-fpm config file here `/usr/local/etc/php/*/php-fpm.d/www.conf`.
-Check especially `listen = 127.0.0.1:9000` and rename it to `unix=/usr/local/var/run/php-fpm/php72-fpm.sock`. 
-(In each file, replace 72 by the version you're editing)
-Then change permission and search for `;listen.mode = 0660` and change it to `listen.mode = 0666` (don't forget to remove the semi-colon)
+
+Check especially `listen = 127.0.0.1:9000` and rename it to `unix=/usr/local/var/run/php-fpm/php72-fpm.sock`. (In each file, replace 72 by the version you're editing)
+
+To ensure search permissions are ok, search for `;listen.mode = 0660` and change it to `listen.mode = 0666` (don't forget to remove the semi-colon).
+
 Everything else can be left as it is.
 
 
@@ -423,7 +426,10 @@ Source it :
     source ~/.zshrc
 
 This script is really simple, it unlinks the current php formula and links the new one.
-Usage `phpswitcher 72` will enable php72 cli
+
+Usage : 
+```phpswitcher 72``` 
+will enable php72 cli
 
 
 ### What about my websites ?
@@ -434,20 +440,17 @@ I usually do 2 things :
 - In the `location ~ \.php$` section I change the `fastcgi_pass` value to match the socket I chose earlier.
 
 
-### Installing Drush
 
-Drush is a command line tool for Drupal
 
-    brew install drush
+# MariaDB
 
-## MariaDB
+## Installing MariaDB && sequel
 
-### Installing MariaDB
-
+    brew cask install sequel-pro
     brew install mariadb
     mysql_install_db
 
-### Configuring MariaDB
+## Configuring MariaDB
 
 You can start MariaDB now:
 
@@ -471,7 +474,7 @@ Restart MariaDB and check if log_bin = OFF:
     SHOW VARIABLES LIKE 'log_bin';
     exit
 
-### Launch MariaDB at login
+## Launch MariaDB at login
 
 After everything is set up, you may want to use launchctl to start mariadb at login:
 
@@ -482,15 +485,15 @@ After everything is set up, you may want to use launchctl to start mariadb at lo
 Run the following to unload the service so it will not start again at login:
 
     launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.mariadb.plist 
-    
 
-### Install Xcode
+## Restore Sequel Pro Favorites
 
-    xcode-select --install
-    sudo xcrun cc
-    xcrun simctl delete unavailable
+- Quit Sequel Pro if it’s running.
+- Replace ~/Library/Application Support/Sequel Pro/Data/Favourites.plist with your backed up copy.
+- Replace ~/Library/Preferences/com.sequelpro.SequelPro.plist with your backed up copy.
 
-## Mac Apps and fonts with Homebrew Cask
+
+## Mac Apps with Homebrew Cask
 
 ```bash
 # Add support for fonts
@@ -513,6 +516,7 @@ evernote \
 dropbox \
 firefox \
 google-chrome \
+icons8 \
 imageoptim \
 imagealpha \
 macdown \
@@ -523,7 +527,6 @@ omnidisksweeper \
 omnigraffle \
 paw \
 pngyu \
-sequel-pro \
 sourcetree \
 sketch \
 skype \
@@ -554,25 +557,8 @@ Some apps require manuel of App Store install:
 
 - Adobe Creative Cloud
 - Pocket
-- Reeder
-- SiteSucker
-- ScanSnap OCR (Abbyy Fine Reader)
 
-Music and DJ apps:
 
-```bash
-brew cask install \
-ableton-live \
-cycling74-max \
-rekordbox \
-soulseek
-```
-
-## Restore Sequel Pro Favorites
-
-- Quit Sequel Pro if it’s running.
-- Replace ~/Library/Application Support/Sequel Pro/Data/Favourites.plist with your backed up copy.
-- Replace ~/Library/Preferences/com.sequelpro.SequelPro.plist with your backed up copy.
 
 ## Git
 
@@ -687,6 +673,7 @@ sudo gem install net-sftp dandelion
 
 ```bash
 npm install -g coffee-script bower
+npm install -g gitbook-cli
 ```
 
 ## LaTeX
