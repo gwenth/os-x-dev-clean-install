@@ -527,6 +527,7 @@ omnidisksweeper \
 omnigraffle \
 paw \
 pngyu \
+postman \
 sourcetree \
 sketch \
 skype \
