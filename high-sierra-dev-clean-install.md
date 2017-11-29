@@ -526,6 +526,7 @@ imagealpha \
 kindle \
 libreoffice \
 macdown \
+mactex \
 mactracker \
 microsoft-office \
 moom \
