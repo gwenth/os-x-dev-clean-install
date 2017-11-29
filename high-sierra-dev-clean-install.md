@@ -509,26 +509,33 @@ brew cask install \
 android-studio \
 androidtool \
 appdelete \
+balsamiq-mockups \
 carbon-copy-cloner \
 charles \
 colorpicker-developer \
 dupeguru \
 evernote \
 dropbox \
+docker \
 firefox \
 front \
 google-chrome \
 icons8 \
 imageoptim \
 imagealpha \
+kindle \
+libreoffice \
 macdown \
 mactracker \
+microsoft-office \
 moom \
 opera \
 omnidisksweeper \
 omnigraffle \
+omniplan \
 paw \
 pngyu \
+poedit \
 postman \
 sourcetree \
 sketch \
@@ -536,10 +543,16 @@ skype \
 slack \
 spotify \
 sublime-text \
+texstudio \
 transmit \
 tripmode \
 vlc \
-vox
+vox \
+zoomus
+
+Not yet in cask :
+- protonmail
+- svgsus
 
 # Encfs
 brew cask install osxfuse
