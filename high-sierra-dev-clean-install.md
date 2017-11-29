@@ -516,6 +516,7 @@ dupeguru \
 evernote \
 dropbox \
 firefox \
+front \
 google-chrome \
 icons8 \
 imageoptim \
