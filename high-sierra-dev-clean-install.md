@@ -223,6 +223,7 @@ drush \
 graphicsmagick \
 imagemagick \
 jpegoptim \
+letsencrypt \
 npm
 pngcrush \
 ssh-copy-id \
