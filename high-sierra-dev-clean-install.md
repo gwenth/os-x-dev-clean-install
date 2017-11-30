@@ -691,7 +691,11 @@ sudo gem install net-sftp dandelion
 ```bash
 npm install -g coffee-script bower
 npm install -g gitbook-cli
+npm install -g gulp
 ```
+
+If an error occurs like `Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime (57)` after gulp, just run `npm rebuild node-sass`.
+
 
 ## LaTeX
 
