@@ -220,6 +220,7 @@ brew install \
 autojump \
 colordiff \
 drush \
+fabric \
 graphicsmagick \
 imagemagick \
 jpegoptim \
