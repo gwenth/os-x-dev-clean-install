@@ -220,7 +220,6 @@ brew install \
 autojump \
 colordiff \
 drush \
-fabric \
 graphicsmagick \
 imagemagick \
 jpegoptim \
@@ -518,6 +517,7 @@ dupeguru \
 evernote \
 dropbox \
 docker \
+fabric \
 firefox \
 front \
 google-chrome \
