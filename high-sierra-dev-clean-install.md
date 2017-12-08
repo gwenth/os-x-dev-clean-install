@@ -576,11 +576,26 @@ Some apps require manuel of App Store install:
 - Adobe Creative Cloud
 - Pocket
 
+# Composer
 
+```bash
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin
+```
 
-## Git
+Add this alias in your `~/.zshrc` file or your `~/.bashrc` or whatever it is :
 
-### Setup Github
+```alias composer="php /usr/local/bin/composer.phar"```
+ 
+Finally, source this file
+
+```bash
+source ~/.zshrc
+```
+
+# Git
+
+## Setup Github
 
 ```bash
 ssh-keygen -t rsa -C "email@domain.com"
