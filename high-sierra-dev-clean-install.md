@@ -586,6 +586,10 @@ mv composer.phar /usr/local/bin
 Add this alias in your `~/.zshrc` file or your `~/.bashrc` or whatever it is :
 
 ```alias composer="php /usr/local/bin/composer.phar"```
+
+Add globally installed packages to your path
+
+```export $PATH=$HOME/.composer/vendor/bin:...```
  
 Finally, source this file
 
