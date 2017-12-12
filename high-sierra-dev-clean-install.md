@@ -593,9 +593,11 @@ Finally, source this file
 source ~/.zshrc
 ```
 
-# Git
+## Global packages :
 
-## Setup Github
+```composer global require "laravel/installer"```
+
+# Git
 
 ```bash
 ssh-keygen -t rsa -C "email@domain.com"
@@ -619,90 +621,21 @@ git config --global github.token your_token_here
 ```
 
 
-## Sublime Text
-
-### Install Soda Theme
-
-```bash
-git clone git://github.com/buymeasoda/soda-theme.git \
-~/Library/Application\ Support/Sublime\ Text\ 3/Packages/Theme\ -\ Soda
-```
-
-### Install Tomorrow Night Eighties Themes
-
-```bash
-#Sublime Text
-git clone git://github.com/chriskempson/textmate-tomorrow-theme.git \
-~/Library/Application\ Support/Sublime\ Text\ 3/Packages/Color\ Scheme\ -\ Tomorrow
-
-# iTerm2
-wget https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/Tomorrow%20Night%20Eighties.itermcolors \
--O ~/Downloads/Tomorrow\ Night\ Eighties.itermcolors && open ~/Downloads/Tomorrow\ Night\ Eighties.itermcolors
-
-# Xcode
-mkdir -p ~/Library/Developer/Xcode/UserData/FontAndColorThemes && \
-wget https://raw.githubusercontent.com/chriskempson/tomorrow-theme/master/Xcode%204/Tomorrow%20Night%20Eighties.dvtcolortheme -O \
-~/Library/Developer/Xcode/UserData/FontAndColorThemes/Tomorrow\ Night\ Eighties.dvtcolortheme
-```
-
-### Settings
-
-```json
-{
-	"close_windows_when_empty": true,
-	"color_scheme": "Packages/Color Scheme - Tomorrow/Tomorrow-Night-Eighties.tmTheme",
-	"draw_indent_guides": false,
-	"font_face": "Source Code Pro",
-	"font_size": 22.0,
-	"highlight_modified_tabs": true,
-	"ignored_packages":
-	[
-		"Vintage"
-	],
-	"show_full_path": true,
-	"show_tab_close_buttons": false,
-	"spell_check": false,
-	"tab_size": 2,
-	"theme": "Soda Light.sublime-theme",
-	"word_separators": "./\\()\"'-:,.;<>~!@#%^&*|+=[]{}`~?"
-}
-
-```
-
-### Key Bindings
-
-
-```json
-[
-	{ "keys": ["super+b"], "command": "expand_selection", "args": {"to": "brackets"} },
-	{ "keys": ["super+f"], "command": "show_panel", "args": {"panel": "replace"} },
-	{ "keys": ["super+alt+f"], "command": "show_panel", "args": {"panel": "find"} }
-]
-```
-
-
-### Snippets
-
-```bash
-git clone git@github.com:co-b/sublime-snippets.git \
-~/Library/Application\ Support/Sublime\ Text\ 3/Packages/CoB
-```
-
-## iOS
+# iOS
 
 ```bash
 sudo gem install cocoapods
 pod setup
 ```
 
-## Dandelion Deployment Tool
+# Dandelion Deployment Tool
 
 ```bash
 brew install cmake
 sudo gem install net-sftp dandelion
 ```
 
-## Node Packages
+# Node Packages
 
 ```bash
 npm install -g coffee-script bower
@@ -713,7 +646,7 @@ npm install -g gulp
 If an error occurs like `Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime (57)` after gulp, just run `npm rebuild node-sass`.
 
 
-## LaTeX
+# LaTeX
 
 Download MacTeX.pkg (2.3 Go): http://www.tug.org/mactex/
 
