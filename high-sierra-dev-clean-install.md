@@ -409,7 +409,11 @@ Source it :
 
     source ~/.zshrc
 
-
+To solo start / stop php you can use :
+```bash
+brew services start homebrew/php/php56
+brew services stop homebrew/php/php56
+```
 ### Switching PHP cli
 
 You can use the custom script [phpswitcher](https://raw.githubusercontent.com/gwenth/os-x-dev-clean-install/master/phpswitcher)
