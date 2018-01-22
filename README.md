@@ -653,6 +653,14 @@ npm install -g gulp
 
 If an error occurs like `Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime (57)` after gulp, just run `npm rebuild node-sass`.
 
+# Spacemacs
+
+```bash
+brew tap d12frosted/emacs-plus
+brew install emacs-plus
+brew linkapps emacs-plus
+git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+```
 
 # LaTeX
 
