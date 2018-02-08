@@ -399,6 +399,7 @@ Everything else can be left as it is.
     launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php72.plist
 
 (Just remove -w option if you don't want it to start automatically, but why would you want that ?)
+You can also restart PHP with those commands without the -w option
 
 
 Update your shell profile (`~/.zshrc`, `~/.bashrc` or so) file so that this branch new php is called before the system's one
@@ -445,6 +446,18 @@ I usually do 2 things :
 - In the `location ~ \.php$` section I change the `fastcgi_pass` value to match the socket I chose earlier.
 
 
+## Installing xdebug for php
+
+```bash
+brew install homebrew/php/php72-xdebug
+launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.php72.plist
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.php72.plist
+```
+
+Note 1 : Replace 72 by whatever version you need :)
+Note 2 : you can also add an alias to your term to automatically restart php :
+
+```alias php72.restart = launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.php72.plist && launchctl load ~/Library/LaunchAgents/homebrew.mxcl.php72.plist```
 
 
 # MariaDB
