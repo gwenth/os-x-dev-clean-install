@@ -339,7 +339,7 @@ Run the following to unload the service so it will not start again at login:
 sudo launchctl unload -w /Library/LaunchDaemons/homebrew.mxcl.nginx.plist
 ```
 
-## Installing PHP-FPM (multiple versions)
+## Installing PHP-FPM (multiple versions --  this is available AFTER Apris 2018 Homebrew update)
 
 Start with taping formulas repositories:
 
@@ -354,26 +354,11 @@ Reinstall curl with openssl:
 
 Then install PHPs
 
-    brew install -v --with-fpm \
-    --without-apache \
-    --with-mysql \
-    --with-homebrew-curl \
-    --with-homebrew-openssl \
-    php56
+    brew install -v php@5.6
 
-    brew install -v --with-fpm \
-    --without-apache \
-    --with-mysql \
-    --with-homebrew-curl \
-    --with-homebrew-openssl \
-    php71
+    brew install -v php@7.1
     
-    brew install -v --with-fpm \
-    --without-apache \
-    --with-mysql \
-    --with-homebrew-curl \
-    --with-homebrew-openssl \
-    php72
+    brew install -v php@7.2
 
 ### Configure php-fpm.conf and php.ini
 
@@ -389,14 +374,14 @@ Everything else can be left as it is.
     
 ### Launch php now and automatically at login 
 
-    sudo cp /usr/local/opt/php72/homebrew.mxcl.php56.plist ~/Library/LaunchAgents
-    launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php56.plist
+    sudo cp /usr/local/opt/php@5.6/homebrew.mxcl.php@5.6.plist ~/Library/LaunchAgents
+    launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php@5.6.plist
     
-    sudo cp /usr/local/opt/php72/homebrew.mxcl.php71.plist ~/Library/LaunchAgents
-    launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php71.plist
+    sudo cp /usr/local/opt/php@7.1/homebrew.mxcl.php@7.1.plist ~/Library/LaunchAgents
+    launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php@7.1.plist
     
-    sudo cp /usr/local/opt/php72/homebrew.mxcl.php72.plist ~/Library/LaunchAgents
-    launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php72.plist
+    sudo cp /usr/local/opt/php@7.2/homebrew.mxcl.php@7.2.plist ~/Library/LaunchAgents
+    launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php@7.2.plist
 
 (Just remove -w option if you don't want it to start automatically, but why would you want that ?)
 You can also restart PHP with those commands without the -w option
@@ -412,8 +397,8 @@ Source it :
 
 To solo start / stop php you can use :
 ```bash
-brew services start homebrew/php/php56
-brew services stop homebrew/php/php56
+brew services start homebrew/php/php@5.6
+brew services stop homebrew/php/php@5.6
 ```
 ### Switching PHP cli
 
@@ -434,8 +419,8 @@ Source it :
 This script is really simple, it unlinks the current php formula and links the new one.
 
 Usage : 
-```phpswitcher 72``` 
-will enable php72 cli
+```phpswitcher 7.2``` 
+will enable php7.2 cli
 
 
 ### What about my websites ?
@@ -448,16 +433,7 @@ I usually do 2 things :
 
 ## Installing xdebug for php
 
-```bash
-brew install homebrew/php/php72-xdebug
-launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.php72.plist
-launchctl load ~/Library/LaunchAgents/homebrew.mxcl.php72.plist
-```
-
-Note 1 : Replace 72 by whatever version you need :)
-Note 2 : you can also add an alias to your term to automatically restart php :
-
-```alias php72.restart = launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.php72.plist && launchctl load ~/Library/LaunchAgents/homebrew.mxcl.php72.plist```
+As of April 2018, `php` was migrated to homebrew core and xdebug is not available anylonger. Please install it through `PECL`
 
 
 # MariaDB
