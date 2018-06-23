@@ -524,6 +524,7 @@ mactex \
 mactracker \
 microsoft-office \
 moom \
+nucleo \
 opera \
 omnidisksweeper \
 omnigraffle \
