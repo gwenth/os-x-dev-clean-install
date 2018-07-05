@@ -345,8 +345,8 @@ Start with taping formulas repositories:
 
     brew tap homebrew/dupes
     brew tap homebrew/versions
-    brew tap homebrew/homebrew-php
 
+If you install via tap homebrew/homebrew-php, please run ```brew untap homebrew/homebrew-php```
 
 Reinstall curl with openssl:
 
