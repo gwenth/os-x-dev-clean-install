@@ -435,6 +435,9 @@ I usually do 2 things :
 
 As of April 2018, `php` was migrated to homebrew core and xdebug is not available anylonger. Please install it through `PECL`
 
+## Installing mongodb for php
+
+If you have only one php version, you need to install it through `PECL` with `sudo pecl install mongodb`. But if you run multiple versions of php and you have already run this command, you can force the install for another php version with : `sudo pecl install -f mongodb` 
 
 # MariaDB
 
