@@ -9,8 +9,7 @@ else
   currentversion="$(php --version | tail -r | tail -n 1 | cut -d " " -f 2 | cut -c 1-3)"
   newversion=$1
   if brew ls --versions php@$newversion > /dev/null; then
-     brew unlink php@$currentversion --force
-     brew link php@$newversion --force
+     brew unlink php@$currentversion && brew link --force php@$newversion
   else
    echo -e "php@$newversion is not installed, please use\nbrew install php@$newversion"
    exit 1
